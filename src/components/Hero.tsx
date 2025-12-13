@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { MapPin, Building2, Clock, Shield } from 'lucide-react';
 
 const Hero = () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 import { Wifi, Coffee, Users, Printer, Lock, Car } from 'lucide-react';
 

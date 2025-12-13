@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Check, ArrowRight } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import type { Office } from '../data/offices';
 
 interface CostBreakdownModalProps {

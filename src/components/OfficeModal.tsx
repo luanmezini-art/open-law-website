@@ -1,3 +1,4 @@
+import React from 'react';
 import { X, Check, Mail, Ruler, Euro } from 'lucide-react';
 import type { Office } from '../data/offices';
 
