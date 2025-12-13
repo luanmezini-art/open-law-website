@@ -10,6 +10,7 @@ export interface Office {
     y: number;
     width: number;
     height: number;
+    image: string;
 }
 
 export const offices: Office[] = [
@@ -26,6 +27,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
     {
         id: '102',
@@ -39,6 +41,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
     {
         id: '103',
@@ -52,6 +55,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
     {
         id: '104',
@@ -65,6 +69,7 @@ export const offices: Office[] = [
         y: 20,
         width: 280, // Double width
         height: 160,
+        image: '/images/office-large.png',
     },
 
     // Bottom Row
@@ -80,6 +85,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
     {
         id: '106',
@@ -93,6 +99,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
+        image: '/images/office-medium.png',
     },
     {
         id: '107',
@@ -106,6 +113,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
     {
         id: '108',
@@ -119,6 +127,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
+        image: '/images/office-large.png',
     },
     {
         id: '109',
@@ -132,5 +141,6 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
+        image: '/images/office-small.png',
     },
 ];
