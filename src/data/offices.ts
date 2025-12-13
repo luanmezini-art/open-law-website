@@ -1,3 +1,7 @@
+import imgSmall from '../assets/images/office-small.png';
+import imgMedium from '../assets/images/office-medium.png';
+import imgLarge from '../assets/images/office-large.png';
+
 export interface Office {
     id: string;
     name: string;
@@ -27,7 +31,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
     {
         id: '102',
@@ -41,7 +45,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
     {
         id: '103',
@@ -55,7 +59,7 @@ export const offices: Office[] = [
         y: 20,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
     {
         id: '104',
@@ -69,7 +73,7 @@ export const offices: Office[] = [
         y: 20,
         width: 280, // Double width
         height: 160,
-        image: '/images/office-large.png',
+        image: imgLarge,
     },
 
     // Bottom Row
@@ -85,7 +89,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
     {
         id: '106',
@@ -99,7 +103,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
-        image: '/images/office-medium.png',
+        image: imgMedium,
     },
     {
         id: '107',
@@ -113,7 +117,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
     {
         id: '108',
@@ -127,7 +131,7 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
-        image: '/images/office-large.png',
+        image: imgLarge,
     },
     {
         id: '109',
@@ -141,6 +145,6 @@ export const offices: Office[] = [
         y: 200,
         width: 130,
         height: 160,
-        image: '/images/office-small.png',
+        image: imgSmall,
     },
 ];
