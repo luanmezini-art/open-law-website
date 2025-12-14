@@ -94,7 +94,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                             {/* Grid Pattern */}
                             <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
 
-                            <svg viewBox="0 0 800 400" className="w-full h-full relative z-10">
+                            <svg viewBox="0 0 1020 400" className="w-full h-full relative z-10">
                                 {offices.map((office) => (
                                     <g
                                         key={office.id}
@@ -140,8 +140,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                 ))}
 
                                 {/* Entrance Label */}
-                                <rect x="360" y="370" width="80" height="24" rx="4" fill="#1e293b" />
-                                <text x="400" y="386" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Eingang</text>
+                                <rect x="470" y="370" width="80" height="24" rx="4" fill="#1e293b" />
+                                <text x="510" y="386" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Eingang</text>
                             </svg>
                         </div>
                         <p className="text-center text-slate-400 text-sm mt-4">

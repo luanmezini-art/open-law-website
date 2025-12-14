@@ -35,7 +35,7 @@ export const offices: Office[] = [
         description: 'Großzügiger Flurbereich.',
         x: 0,
         y: 120, // Middle "Separating" corridor visually, though handled differently usually. Let's put rooms around it.
-        width: 800, // Spans whole width
+        width: 1020, // Spans whole width
         height: 60,
         image: imgLarge,
     },
