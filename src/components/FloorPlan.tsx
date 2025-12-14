@@ -71,10 +71,10 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
 
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                     {/* Left Column: Floor Plan */}
-                    <div className="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-slate-100 p-8">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-slate-800">Grundriss - Erdgeschoss</h3>
-                            <div className="flex gap-4 text-xs font-medium">
+                    <div className="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-slate-100 p-4 md:p-8">
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 mb-6">
+                            <h3 className="text-lg md:text-xl font-bold text-slate-800 text-center md:text-left">Grundriss - Erdgeschoss</h3>
+                            <div className="flex flex-wrap justify-center gap-3 md:gap-4 text-xs font-medium">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
                                     <span>Verfügbar</span>
@@ -150,7 +150,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                     </div>
 
                     {/* Right Column: Details Panel */}
-                    <div className="bg-white rounded-3xl shadow-lg border border-slate-100 p-8 h-full min-h-[600px] flex flex-col">
+                    <div className="bg-white rounded-3xl shadow-lg border border-slate-100 p-4 md:p-8 h-full min-h-[500px] md:min-h-[600px] flex flex-col">
                         <h3 className="text-lg font-semibold text-slate-500 mb-6">Büro-Details</h3>
 
                         {focusedOffice ? (
