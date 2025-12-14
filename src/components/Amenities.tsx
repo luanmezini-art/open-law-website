@@ -26,17 +26,17 @@ const Amenities = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+                <div className="grid grid-cols-3 gap-2 md:gap-6">
                     {amenities.map((item, index) => (
                         <div
                             key={index}
-                            className="bg-white p-3 md:p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col items-center text-center group"
+                            className="bg-white p-2 md:p-5 rounded-xl md:rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col items-center text-center group"
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300">
-                                <item.icon className="w-5 h-5 md:w-6 md:h-6" />
+                            <div className="w-8 h-8 md:w-12 md:h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 mb-1.5 md:mb-3 group-hover:scale-110 transition-transform duration-300">
+                                <item.icon className="w-4 h-4 md:w-6 md:h-6" />
                             </div>
-                            <h3 className="text-sm md:text-lg font-bold text-slate-900 mb-1">{item.title}</h3>
-                            <p className="text-xs md:text-sm text-slate-500 leading-tight">{item.desc}</p>
+                            <h3 className="text-xs md:text-lg font-bold text-slate-900 mb-0.5 md:mb-1">{item.title}</h3>
+                            <p className="text-[10px] md:text-sm text-slate-500 leading-tight">{item.desc}</p>
                         </div>
                     ))}
                 </div>

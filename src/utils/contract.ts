@@ -8,6 +8,7 @@ interface FormData {
   phone: string;
   startDate: string;
   duration: number;
+  durationUnit?: 'months' | 'days';
 }
 
 export const generateContract = (offices: Office[], data: FormData) => {
@@ -24,7 +25,16 @@ export const generateContract = (offices: Office[], data: FormData) => {
   const cleaningFee = totalArea * 1.50;
   const monthlyNet = totalBaseRent + serviceCharges + cleaningFee;
   const monthlyGross = monthlyNet * 1.19;
-  const totalContractValue = monthlyGross * data.duration;
+
+  const isDays = data.durationUnit === 'days';
+  const durationLabel = isDays ? 'Tagen' : 'Monaten';
+
+  // Daily rate logic if days
+  const dailyGross = monthlyGross / 30;
+  const totalContractValue = isDays
+    ? dailyGross * data.duration
+    : monthlyGross * data.duration;
+
   const deposit = monthlyGross * 3;
 
   const today = new Date().toLocaleDateString('de-DE');
@@ -96,22 +106,23 @@ export const generateContract = (offices: Office[], data: FormData) => {
   );
 
   addSection('§2 MIETZEIT',
-    `Das Mietverhältnis beginnt am ${start}.\nEs wird eine feste Laufzeit von ${data.duration} Monaten vereinbart.\nDie Kündigungsfrist beträgt 3 Monate zum Laufzeitende. Wird das Mietverhältnis nicht gekündigt, verlängert es sich automatisch um weitere 12 Monate.`
+    `Das Mietverhältnis beginnt am ${start}.\nEs wird eine feste Laufzeit von ${data.duration} ${durationLabel} vereinbart.\nDie Kündigungsfrist beträgt 3 Monate zum Laufzeitende. Wird das Mietverhältnis nicht gekündigt, verlängert es sich automatisch um weitere 12 Monate.`
   );
 
-  addSection('§3 MIETE UND KAUTION',
+  const priceDetails =
     `Die monatliche Miete setzt sich wie folgt zusammen:\n\n` +
     `Nettokaltmiete: ${totalBaseRent.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
     `Nebenkostenpauschale: ${serviceCharges.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
     `Reinigungsservice: ${cleaningFee.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
     `--------------------------------------------------\n` +
-    `Zwischensumme (netto): ${monthlyNet.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
-    `zzgl. 19% MwSt.: ${(monthlyNet * 0.19).toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
+    `Monatsmiete (netto): ${monthlyNet.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
+    `Gesamtmiete (brutto): ${monthlyGross.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` +
     `--------------------------------------------------\n` +
-    `Gesamtmiete (brutto): ${monthlyGross.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n\n` +
-    `Die Kaution beträgt 3 Bruttomonatsmieten (${deposit.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR).\n` +
-    `Der Gesamtvertragswert beläuft sich auf ${totalContractValue.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR.`
-  );
+    (isDays ? `Tagesrate (Basis 30 Tage): ${dailyGross.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR\n` : '') +
+    `\nDie Kaution beträgt 3 Bruttomonatsmieten (${deposit.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR).\n` +
+    `Der Gesamtvertragswert beläuft sich auf ${totalContractValue.toLocaleString('de-DE', { minimumFractionDigits: 2 })} EUR.`;
+
+  addSection('§3 MIETE UND KAUTION', priceDetails);
 
   addSection('§4 AUSSTATTUNG',
     `Die Büros verfügen über folgende Ausstattungsmerkmale:\n${Array.from(new Set(offices.flatMap(o => o.features))).map(f => `- ${f}`).join('\n')}`

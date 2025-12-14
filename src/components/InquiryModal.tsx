@@ -33,28 +33,28 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
     const [isSuccess, setIsSuccess] = useState(false);
 
     // Duration calculation
-    const [durationMonths, setDurationMonths] = useState(0);
+    const [durationDays, setDurationDays] = useState(0);
+
+    const getTodayString = () => new Date().toISOString().split('T')[0];
 
     useEffect(() => {
         if (formData.startDate && formData.endDate) {
             const start = new Date(formData.startDate);
             const end = new Date(formData.endDate);
-            const diffTime = Math.abs(end.getTime() - start.getTime());
+            const diffTime = end.getTime() - start.getTime();
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            // Approximate months for display, pricing is usually monthly
-            // Let's count full months for contract
-            let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-            if (end.getDate() < start.getDate()) months--;
-            // Minimal duration 1 month if days > 0
-            if (months < 1 && diffDays > 0) months = 0; // Partial month? Let's say explicit dates -> explicit days.
-            // But contract logic is monthly based usually. Let's use exact Months + fraction or just simple Month duration.
-            // User asked for "selection on calendar".
-            // Let's calculate precise months (float) for price or round up?
-            // Simple approach: Duration in Months (rounded to 1 decimal)
-            const m = diffDays / 30.44; // Avg days in month
-            setDurationMonths(Number(m.toFixed(1)));
+            // Add 1 day if we consider start date inclusive interaction wise, usually checked out next day?
+            // "Mietdauer" usually implies nights or full working days. Let's take diffDays (nights).
+            // If Start=1st, End=2nd -> 1 Night/Day charge? Or 2 Days use?
+            // "Tage anzugeben" -> 1.1. - 1.1. is 1 Day. 
+            // Let's assume inclusive start, exclusive end logic or inclusive-inclusive? 
+            // "1.1. to 2.1." -> Usually 1 day if hotel. But office? 
+            // If I rent for "Today", I want it Today. End Date Today?
+            // Let's use inclusive: If start == end, it's 1 day.
+            const days = diffDays >= 0 ? diffDays + 1 : 0;
+            setDurationDays(days);
         } else {
-            setDurationMonths(0);
+            setDurationDays(0);
         }
     }, [formData.startDate, formData.endDate]);
 
@@ -116,12 +116,8 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
 
     const handleSubmit = () => {
         if (validate()) {
-            // Determine duration integer for contract (rounding up or just partial?)
-            // Contract uses integer months usually. Let's pass the float or calculated months.
-            // We pass duration to generateContract. Let's round up to full months for the contract text.
-            const contractDuration = Math.ceil(durationMonths);
-
-            const result = generateContract(selectedOffices, { ...formData, duration: contractDuration }); // Adapt contract util if needed or spread correctly
+            // Pass days to contract
+            const result = generateContract(selectedOffices, { ...formData, duration: durationDays, durationUnit: 'days' });
             // result.doc.save(result.filename); // REMOVED auto-save
             setLastContract(result);
             setIsSuccess(true);
@@ -130,13 +126,18 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
 
     const totalBaseRent = selectedOffices.reduce((sum, office) => sum + office.price, 0);
     const totalArea = selectedOffices.reduce((sum, office) => sum + office.area, 0);
+
+    // Monthly Costs
     const serviceCharges = totalArea * 3.50;
     const cleaningFee = totalArea * 1.50;
     const monthlyNet = totalBaseRent + serviceCharges + cleaningFee;
     const monthlyGross = monthlyNet * 1.19;
 
-    // Total Value based on actual calculated duration
-    const totalContractValue = monthlyGross * durationMonths;
+    // Daily logic (Standard 30 days month base for rate calculation)
+    const dailyGross = monthlyGross / 30;
+
+    // Total Value
+    const totalContractValue = dailyGross * durationDays;
 
     if (isSuccess) {
         return (
@@ -256,10 +257,11 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                                     <div className="relative">
                                         <input
                                             type="date"
+                                            min={getTodayString()}
                                             value={formData.startDate}
                                             onChange={(e) => {
                                                 setFormData({ ...formData, startDate: e.target.value });
-                                                setAvailabilityError(null); // Reset error on change
+                                                setAvailabilityError(null);
                                             }}
                                             className={`w-full px-3 py-2 rounded-lg border ${errors.startDate ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:border-blue-500'} outline-none transition-colors text-sm`}
                                         />
@@ -271,6 +273,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                                     <div className="relative">
                                         <input
                                             type="date"
+                                            min={formData.startDate || getTodayString()}
                                             value={formData.endDate}
                                             onChange={(e) => {
                                                 setFormData({ ...formData, endDate: e.target.value });
@@ -288,7 +291,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                                 <Calendar className="w-5 h-5 text-blue-500" />
                                 <div>
                                     <span className="text-xs text-slate-500 block uppercase tracking-wider font-bold">Mietdauer</span>
-                                    <span className="font-bold text-slate-900">{durationMonths > 0 ? `${durationMonths} Monate` : '-'}</span>
+                                    <span className="font-bold text-slate-900">{durationDays > 0 ? `${durationDays} Tag(e)` : '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -297,16 +300,16 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                     <div className="bg-blue-50 rounded-xl p-6 mb-8 border border-blue-100">
                         <h4 className="font-bold text-slate-900 mb-4">Zusammenfassung</h4>
                         <div className="flex justify-between mb-2 text-sm">
-                            <span className="text-slate-600">Monatliche Kosten (brutto)</span>
-                            <span className="font-medium">{monthlyGross.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                            <span className="text-slate-600">Tagespreis (brutto)</span>
+                            <span className="font-medium">{dailyGross.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                         </div>
                         <div className="flex justify-between mb-2 text-sm">
                             <span className="text-slate-600">Gewählte Laufzeit</span>
-                            <span className="font-medium">{durationMonths} Monate</span>
+                            <span className="font-medium">{durationDays} Tage</span>
                         </div>
                         <div className="border-t border-blue-200 mt-3 pt-3 flex justify-between items-center">
-                            <span className="font-bold text-slate-900">Gesamtvertragswert</span>
-                            <span className="text-xl font-bold text-blue-600">{totalContractValue.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                            <span className="font-bold text-slate-900">Gesamtpreis</span>
+                            <span className="text-xl font-bold text-blue-600">{totalContractValue.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                         </div>
                     </div>
 
