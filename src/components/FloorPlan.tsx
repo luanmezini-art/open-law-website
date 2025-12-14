@@ -97,7 +97,15 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                             {/* Grid Pattern */}
                             <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
 
-                            <svg viewBox="0 0 1020 400" className="w-full h-full relative z-10">
+                            <svg viewBox="0 0 1020 460" className="w-full h-full relative z-10">
+                                {/* Labels */}
+                                <text x="510" y="30" textAnchor="middle" fill="#94a3b8" fontSize="16" fontWeight="bold" letterSpacing="0.2em">HOFSEITE</text>
+                                <text x="510" y="450" textAnchor="middle" fill="#94a3b8" fontSize="16" fontWeight="bold" letterSpacing="0.2em">STRASSENSEITE</text>
+
+                                {/* Entrances */}
+                                <text x="50" y="225" textAnchor="middle" fill="#475569" fontSize="10" fontWeight="bold">EINGANG</text>
+                                <text x="840" y="225" textAnchor="middle" fill="#475569" fontSize="10" fontWeight="bold">EINGANG</text>
+
                                 {offices.map((office) => (
                                     <g
                                         key={office.id}
@@ -115,7 +123,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                             width={office.width}
                                             height={office.height}
                                             fill={getStatusColor(office)}
-                                            rx="8"
+                                            rx="4"
                                             stroke={isSelected(office) || focusedOffice?.id === office.id ? '#1e293b' : 'transparent'}
                                             strokeWidth={isSelected(office) || focusedOffice?.id === office.id ? '4' : '0'}
                                             className="drop-shadow-sm"
@@ -147,10 +155,6 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                         )}
                                     </g>
                                 ))}
-
-                                {/* Entrance Label */}
-                                <rect x="470" y="370" width="80" height="24" rx="4" fill="#1e293b" />
-                                <text x="510" y="386" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Eingang</text>
                             </svg>
                         </div>
                         <p className="text-center text-slate-400 text-sm mt-4">
