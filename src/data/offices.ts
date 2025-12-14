@@ -25,13 +25,15 @@ export interface Office {
 // Bottom Row (Straßenseite): Rooms 20-29
 // Layout verified against floor plan screenshot.
 
-export const offices: Office[] = [
+// Base Rent per sqm
+const PRICE_PER_SQM = 23.00;
+
+const officeData: Omit<Office, 'price'>[] = [
     // --- Struktur / Facilities (Hofseite) ---
     {
         id: 'TH4',
         name: 'TH4',
         area: 0,
-        price: 0,
         status: 'rented',
         type: 'facility',
         features: [],
@@ -46,7 +48,6 @@ export const offices: Office[] = [
         id: 'FAC_L',
         name: 'WC / Küche',
         area: 0,
-        price: 0,
         status: 'rented',
         type: 'facility',
         features: [],
@@ -63,7 +64,6 @@ export const offices: Office[] = [
         id: '33',
         name: 'Büro 33',
         area: 14.4,
-        price: 345,
         status: 'available',
         features: ['Hofseitig', 'Ruhig'],
         description: 'Ruhiges Einzelbüro zum Hof.',
@@ -80,7 +80,6 @@ export const offices: Office[] = [
         id: '32',
         name: 'Büro 32',
         area: 23.3,
-        price: 560,
         status: 'available',
         features: ['Team-Büro', 'Hofblick'],
         description: 'Helles Büro für 2 Personen.',
@@ -97,7 +96,6 @@ export const offices: Office[] = [
         id: 'ENT_HOF',
         name: 'Eingang Hof',
         area: 0,
-        price: 0,
         status: 'rented',
         type: 'facility',
         features: [],
@@ -114,7 +112,6 @@ export const offices: Office[] = [
         id: '31',
         name: 'Büro 31',
         area: 23.2,
-        price: 558,
         status: 'available',
         features: ['Verglast', 'Modern'],
         description: 'Modernes Team-Büro, zentral gelegen.',
@@ -128,7 +125,6 @@ export const offices: Office[] = [
         id: '30',
         name: 'Büro 30',
         area: 14.0,
-        price: 336,
         status: 'available',
         features: ['Kompakt', 'Hofseitig'],
         description: 'Kleines Einzelbüro.',
@@ -144,7 +140,6 @@ export const offices: Office[] = [
         id: 'TH5',
         name: 'TH5',
         area: 0,
-        price: 0,
         status: 'rented',
         type: 'facility',
         features: [],
@@ -161,7 +156,6 @@ export const offices: Office[] = [
         id: '04',
         name: 'Flur 04',
         area: 68.3,
-        price: 0,
         status: 'rented', // Common area
         features: ['Gemeinschaftsfläche'],
         description: 'Großzügiger Flurbereich.',
@@ -177,7 +171,6 @@ export const offices: Office[] = [
         id: '20',
         name: 'Büro 20',
         area: 25.3,
-        price: 608,
         status: 'available',
         features: ['Eckbüro', 'Straßenblick'],
         description: 'Großes Eckbüro mit viel Licht.',
@@ -191,7 +184,6 @@ export const offices: Office[] = [
         id: '21',
         name: 'Büro 21',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -205,7 +197,6 @@ export const offices: Office[] = [
         id: '22',
         name: 'Büro 22',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -219,7 +210,6 @@ export const offices: Office[] = [
         id: '23',
         name: 'Büro 23',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -233,7 +223,6 @@ export const offices: Office[] = [
         id: '24',
         name: 'Büro 24',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -247,7 +236,6 @@ export const offices: Office[] = [
         id: '25',
         name: 'Büro 25',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -261,7 +249,6 @@ export const offices: Office[] = [
         id: '26',
         name: 'Büro 26',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -275,7 +262,6 @@ export const offices: Office[] = [
         id: '27',
         name: 'Büro 27',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -289,7 +275,6 @@ export const offices: Office[] = [
         id: '28',
         name: 'Büro 28',
         area: 14.7,
-        price: 353,
         status: 'available',
         features: ['Standard'],
         description: 'Effizientes Einzelbüro.',
@@ -303,7 +288,6 @@ export const offices: Office[] = [
         id: '29',
         name: 'Büro 29',
         area: 25.2,
-        price: 605,
         status: 'available',
         features: ['Eckbüro'],
         description: 'Großes Eckbüro.',
@@ -314,3 +298,8 @@ export const offices: Office[] = [
         image: imgMedium,
     },
 ];
+
+export const offices: Office[] = officeData.map(o => ({
+    ...o,
+    price: Math.round(o.area * PRICE_PER_SQM)
+}));

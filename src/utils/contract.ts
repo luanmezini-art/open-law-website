@@ -21,7 +21,7 @@ export const generateContract = (offices: Office[], data: FormData) => {
   const totalArea = offices.reduce((sum, office) => sum + office.area, 0);
 
   // Costs calculation
-  const serviceCharges = totalArea * 3.50;
+  const serviceCharges = totalArea * 4.50;
   const cleaningFee = totalArea * 1.50;
   const monthlyNet = totalBaseRent + serviceCharges + cleaningFee;
   const monthlyGross = monthlyNet * 1.19;

@@ -13,7 +13,7 @@ const CostBreakdownModal: React.FC<CostBreakdownModalProps> = ({ selectedOffices
     const baseRent = selectedOffices.reduce((sum, office) => sum + office.price, 0);
 
     // Costs calculation
-    const serviceCharges = totalArea * 3.50; // 3.50€ per m²
+    const serviceCharges = totalArea * 4.50; // 4.50€ per m²
     const cleaningFee = totalArea * 1.50; // 1.50€ per m²
     const netTotal = baseRent + serviceCharges + cleaningFee;
     const vat = netTotal * 0.19;

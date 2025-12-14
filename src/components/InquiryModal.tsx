@@ -128,7 +128,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
     const totalArea = selectedOffices.reduce((sum, office) => sum + office.area, 0);
 
     // Monthly Costs
-    const serviceCharges = totalArea * 3.50;
+    const serviceCharges = totalArea * 4.50;
     const cleaningFee = totalArea * 1.50;
     const monthlyNet = totalBaseRent + serviceCharges + cleaningFee;
     const monthlyGross = monthlyNet * 1.19;
