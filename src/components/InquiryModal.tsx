@@ -153,7 +153,20 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                     <div className="flex flex-col gap-3">
                         {lastContract && (
                             <button
-                                onClick={() => lastContract.doc.save(lastContract.filename)}
+                                onClick={() => {
+                                    if (lastContract) {
+                                        // Mobile-friendly download: Blob + Anchor
+                                        const blob = lastContract.doc.output('blob');
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = lastContract.filename;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                    }
+                                }}
                                 className="w-full py-4 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-500/30"
                             >
                                 <Download className="w-5 h-5" />

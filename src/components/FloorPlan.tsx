@@ -74,7 +74,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
 
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                     {/* Left Column: Floor Plan */}
-                    <div className="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-slate-100 p-4 md:p-8">
+                    <div className="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-slate-100 p-2 md:p-4">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 mb-6">
                             <h3 className="text-lg md:text-xl font-bold text-slate-800 text-center md:text-left">Grundriss - Erdgeschoss</h3>
                             <div className="flex flex-wrap justify-center gap-3 md:gap-4 text-xs font-medium">
