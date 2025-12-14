@@ -155,6 +155,31 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
 
                         {focusedOffice ? (
                             <div className="flex-1 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                {/* Image Section */}
+                                <div className="h-48 w-full relative rounded-2xl overflow-hidden mb-6 shadow-sm">
+                                    <img
+                                        src={focusedOffice.image || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"}
+                                        alt={focusedOffice.name}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.currentTarget.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80";
+                                            e.currentTarget.onerror = null;
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <div className="absolute bottom-3 right-4">
+                                        <a
+                                            href={focusedOffice.image || "#"}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded backdrop-blur-sm transition-colors border border-white/30"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            Bild öffnen
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <div className="flex justify-between items-start mb-6">
                                     <div>
                                         <h2 className="text-3xl font-bold text-slate-900">{focusedOffice.name}</h2>
@@ -206,8 +231,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                     <button
                                         onClick={() => !isSelected(focusedOffice) && onOfficeToggle(focusedOffice)}
                                         className={`w-full py-4 rounded-xl font-bold text-white transition-all transform active:scale-95 ${isSelected(focusedOffice)
-                                                ? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/30'
-                                                : 'bg-slate-900 hover:bg-slate-800 shadow-lg shadow-slate-900/20'
+                                            ? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/30'
+                                            : 'bg-slate-900 hover:bg-slate-800 shadow-lg shadow-slate-900/20'
                                             }`}
                                     >
                                         {isSelected(focusedOffice) ? 'Ausgewählt' : 'Jetzt reservieren & Mietvertrag erstellen'}
