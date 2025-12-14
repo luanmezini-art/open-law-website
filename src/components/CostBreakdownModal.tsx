@@ -52,36 +52,37 @@ const CostBreakdownModal: React.FC<CostBreakdownModalProps> = ({ selectedOffices
                     </div>
 
                     <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 space-y-3 mb-8">
+                        {/* Daily Rate Logic */}
                         <div className="flex justify-between items-center">
-                            <span className="text-slate-600">Nettokaltmiete</span>
-                            <span className="font-medium">{baseRent.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                            <span className="text-slate-600">Tagesmiete (netto)</span>
+                            <span className="font-medium">{(baseRent / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                         </div>
                         <div className="flex justify-between items-center text-sm">
-                            <span className="text-slate-500">Nebenkostenpauschale (3,50 €/m²)</span>
-                            <span className="text-slate-600">{serviceCharges.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                            <span className="text-slate-500">Nebenkosten (pro Tag, pauschal)</span>
+                            <span className="text-slate-600">{(serviceCharges / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                         </div>
                         <div className="flex justify-between items-center text-sm">
-                            <span className="text-slate-500">Reinigungsservice (1,50 €/m²)</span>
-                            <span className="text-slate-600">{cleaningFee.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                            <span className="text-slate-500">Reinigung (pro Tag, anteilig)</span>
+                            <span className="text-slate-600">{(cleaningFee / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                         </div>
 
                         <div className="border-t border-slate-200 my-2 pt-2">
                             <div className="flex justify-between items-center font-medium">
-                                <span className="text-slate-900">Zwischensumme (netto)</span>
-                                <span>{netTotal.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                <span className="text-slate-900">Zwischensumme (netto / Tag)</span>
+                                <span>{(netTotal / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                             </div>
                             <div className="flex justify-between items-center text-sm mt-1">
                                 <span className="text-slate-500">MwSt. (19%)</span>
-                                <span className="text-slate-600">{vat.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                <span className="text-slate-600">{(vat / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                             </div>
                         </div>
 
                         <div className="border-t border-slate-300 pt-3 mt-2">
                             <div className="flex justify-between items-center">
                                 <span className="text-lg font-bold text-slate-900">Gesamtbetrag (brutto)</span>
-                                <span className="text-2xl font-bold text-blue-600">{grossTotal.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
+                                <span className="text-2xl font-bold text-blue-600">{(grossTotal / 30).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
                             </div>
-                            <p className="text-right text-xs text-slate-400 mt-1">monatlich</p>
+                            <p className="text-right text-xs text-slate-400 mt-1">pro Tag (Basis 30 Tage)</p>
                         </div>
                     </div>
 
