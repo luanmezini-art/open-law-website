@@ -18,10 +18,23 @@ const OfficeModal: React.FC<OfficeModalProps> = ({ office, onClose, onRequest })
                         src={office.image || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"}
                         alt={office.name}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                            e.currentTarget.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80";
+                            e.currentTarget.onerror = null;
+                        }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    <div className="absolute bottom-3 left-4 md:bottom-4 md:left-6 text-white">
+                    <div className="absolute bottom-3 left-4 md:bottom-4 md:left-6 text-white flex justify-between items-end w-full pr-4">
                         <h3 className="text-xl md:text-2xl font-bold shadow-sm">{office.name}</h3>
+                        <a
+                            href={office.image || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded backdrop-blur-sm transition-colors border border-white/30"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            Bild öffnen
+                        </a>
                     </div>
                 </div>
 
