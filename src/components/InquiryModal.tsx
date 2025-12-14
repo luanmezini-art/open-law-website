@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
-import { X, Download, CheckCircle } from 'lucide-react';
+import { X, Download, CheckCircle, AlertTriangle, Calendar } from 'lucide-react';
 import type { Office } from '../data/offices';
 import { generateContract } from '../utils/contract';
 
@@ -15,7 +15,7 @@ interface FormData {
     email: string;
     phone: string;
     startDate: string;
-    duration: number;
+    endDate: string;
 }
 
 const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose }) => {
@@ -25,11 +25,59 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
         email: '',
         phone: '',
         startDate: '',
-        duration: 12,
+        endDate: '',
     });
 
     const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+    const [availabilityError, setAvailabilityError] = useState<string | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    // Duration calculation
+    const [durationMonths, setDurationMonths] = useState(0);
+
+    useEffect(() => {
+        if (formData.startDate && formData.endDate) {
+            const start = new Date(formData.startDate);
+            const end = new Date(formData.endDate);
+            const diffTime = Math.abs(end.getTime() - start.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            // Approximate months for display, pricing is usually monthly
+            // Let's count full months for contract
+            let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            if (end.getDate() < start.getDate()) months--;
+            // Minimal duration 1 month if days > 0
+            if (months < 1 && diffDays > 0) months = 0; // Partial month? Let's say explicit dates -> explicit days.
+            // But contract logic is monthly based usually. Let's use exact Months + fraction or just simple Month duration.
+            // User asked for "selection on calendar".
+            // Let's calculate precise months (float) for price or round up?
+            // Simple approach: Duration in Months (rounded to 1 decimal)
+            const m = diffDays / 30.44; // Avg days in month
+            setDurationMonths(Number(m.toFixed(1)));
+        } else {
+            setDurationMonths(0);
+        }
+    }, [formData.startDate, formData.endDate]);
+
+    const checkAvailability = (start: string, end: string): boolean => {
+        const s = new Date(start);
+        const e = new Date(end);
+
+        for (const office of selectedOffices) {
+            if (office.bookings) {
+                for (const booking of office.bookings) {
+                    const bStart = new Date(booking.start);
+                    const bEnd = new Date(booking.end);
+                    // Check overlap
+                    if (s <= bEnd && e >= bStart) {
+                        setAvailabilityError(`Büro ${office.name} ist im gewählten Zeitraum bereits belegt (${new Date(booking.start).toLocaleDateString()} - ${new Date(booking.end).toLocaleDateString()}).`);
+                        return false;
+                    }
+                }
+            }
+        }
+        setAvailabilityError(null);
+        return true;
+    };
 
     const validate = (): boolean => {
         const newErrors: Partial<Record<keyof FormData, string>> = {};
@@ -46,20 +94,37 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
         }
 
         if (!formData.startDate) newErrors.startDate = 'Mietbeginn ist erforderlich';
+        if (!formData.endDate) newErrors.endDate = 'Mietende ist erforderlich';
+
+        if (formData.startDate && formData.endDate) {
+            if (new Date(formData.endDate) <= new Date(formData.startDate)) {
+                newErrors.endDate = 'Enddatum muss nach Startdatum liegen';
+            } else {
+                // Check Availability only if dates are valid
+                if (!checkAvailability(formData.startDate, formData.endDate)) {
+                    // Availability error is set in the check function
+                    return false;
+                }
+            }
+        }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors).length === 0 && !availabilityError;
     };
 
     const [lastContract, setLastContract] = useState<{ doc: jsPDF, filename: string } | null>(null);
 
     const handleSubmit = () => {
         if (validate()) {
-            const result = generateContract(selectedOffices, formData);
-            result.doc.save(result.filename);
+            // Determine duration integer for contract (rounding up or just partial?)
+            // Contract uses integer months usually. Let's pass the float or calculated months.
+            // We pass duration to generateContract. Let's round up to full months for the contract text.
+            const contractDuration = Math.ceil(durationMonths);
+
+            const result = generateContract(selectedOffices, { ...formData, duration: contractDuration }); // Adapt contract util if needed or spread correctly
+            // result.doc.save(result.filename); // REMOVED auto-save
             setLastContract(result);
             setIsSuccess(true);
-            // Removed auto-close timeout to let user see the download feedback
         }
     };
 
@@ -69,7 +134,9 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
     const cleaningFee = totalArea * 1.50;
     const monthlyNet = totalBaseRent + serviceCharges + cleaningFee;
     const monthlyGross = monthlyNet * 1.19;
-    const totalContractValue = monthlyGross * formData.duration;
+
+    // Total Value based on actual calculated duration
+    const totalContractValue = monthlyGross * durationMonths;
 
     if (isSuccess) {
         return (
@@ -80,18 +147,17 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                     </div>
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">Anfrage erfolgreich!</h3>
                     <p className="text-slate-600 mb-6">
-                        Ihr Mietvertrag wurde generiert und heruntergeladen. <br />
-                        Wir werden uns in Kürze bei Ihnen melden.
+                        Ihr Zeitraum ist verfügbar. Der Mietvertrag wurde erstellt und steht zum Download bereit.
                     </p>
 
                     <div className="flex flex-col gap-3">
                         {lastContract && (
                             <button
                                 onClick={() => lastContract.doc.save(lastContract.filename)}
-                                className="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium flex items-center justify-center gap-2 transition-colors"
+                                className="w-full py-4 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-500/30"
                             >
                                 <Download className="w-5 h-5" />
-                                Vertrag erneut herunterladen
+                                Mietvertrag jetzt herunterladen
                             </button>
                         )}
                         <button onClick={onClose} className="w-full py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors">
@@ -114,6 +180,14 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                 </div>
 
                 <div className="p-4 md:p-8">
+                    {/* Availability Error Banner */}
+                    {availabilityError && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 flex items-start gap-3">
+                            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm font-medium">{availabilityError}</p>
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div className="space-y-4">
                             <div>
@@ -162,29 +236,47 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Mietbeginn *</label>
-                                <input
-                                    type="date"
-                                    value={formData.startDate}
-                                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                    className={`w-full px-4 py-2 rounded-lg border ${errors.startDate ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:border-blue-500'} outline-none transition-colors`}
-                                />
-                                {errors.startDate && <p className="text-red-500 text-xs mt-1">{errors.startDate}</p>}
+                            {/* Date Range Selection */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Mietbeginn *</label>
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            value={formData.startDate}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, startDate: e.target.value });
+                                                setAvailabilityError(null); // Reset error on change
+                                            }}
+                                            className={`w-full px-3 py-2 rounded-lg border ${errors.startDate ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:border-blue-500'} outline-none transition-colors text-sm`}
+                                        />
+                                    </div>
+                                    {errors.startDate && <p className="text-red-500 text-xs mt-1">{errors.startDate}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Mietende *</label>
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            value={formData.endDate}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, endDate: e.target.value });
+                                                setAvailabilityError(null);
+                                            }}
+                                            className={`w-full px-3 py-2 rounded-lg border ${errors.endDate ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:border-blue-500'} outline-none transition-colors text-sm`}
+                                        />
+                                    </div>
+                                    {errors.endDate && <p className="text-red-500 text-xs mt-1">{errors.endDate}</p>}
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Laufzeit</label>
-                                <select
-                                    value={formData.duration}
-                                    onChange={(e) => setFormData({ ...formData, duration: Number(e.target.value) })}
-                                    className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:border-blue-500 outline-none bg-white"
-                                >
-                                    <option value={6}>6 Monate</option>
-                                    <option value={12}>12 Monate</option>
-                                    <option value={24}>24 Monate</option>
-                                    <option value={36}>36 Monate</option>
-                                </select>
+                            {/* Duration Indicator */}
+                            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex items-center gap-3">
+                                <Calendar className="w-5 h-5 text-blue-500" />
+                                <div>
+                                    <span className="text-xs text-slate-500 block uppercase tracking-wider font-bold">Mietdauer</span>
+                                    <span className="font-bold text-slate-900">{durationMonths > 0 ? `${durationMonths} Monate` : '-'}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -196,8 +288,8 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                             <span className="font-medium">{monthlyGross.toLocaleString('de-DE', { minimumFractionDigits: 2 })} €</span>
                         </div>
                         <div className="flex justify-between mb-2 text-sm">
-                            <span className="text-slate-600">Laufzeit</span>
-                            <span className="font-medium">{formData.duration} Monate</span>
+                            <span className="text-slate-600">Gewählte Laufzeit</span>
+                            <span className="font-medium">{durationMonths} Monate</span>
                         </div>
                         <div className="border-t border-blue-200 mt-3 pt-3 flex justify-between items-center">
                             <span className="font-bold text-slate-900">Gesamtvertragswert</span>
@@ -214,10 +306,11 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                         </button>
                         <button
                             onClick={handleSubmit}
-                            className="flex-1 py-3 px-6 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-blue-500/30"
+                            disabled={!!availabilityError}
+                            className={`flex-1 py-3 px-6 rounded-xl text-white font-bold flex items-center justify-center gap-2 shadow-lg transition-all ${availabilityError ? 'bg-slate-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-blue-500/30'}`}
                         >
-                            <Download className="w-5 h-5" />
-                            Anfrage senden & Vertrag laden
+                            <CheckCircle className="w-5 h-5" />
+                            Verfügbarkeit prüfen & Buchen
                         </button>
                     </div>
                 </div>

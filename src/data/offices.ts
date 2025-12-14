@@ -16,6 +16,7 @@ export interface Office {
     width: number;
     height: number;
     image: string;
+    bookings?: { start: string; end: string }[];
 }
 
 // Layout Note:
@@ -71,6 +72,9 @@ export const offices: Office[] = [
         width: 100,
         height: 140,
         image: imgSmall,
+        bookings: [
+            { start: '2025-01-01', end: '2025-06-30' }
+        ]
     },
     {
         id: '32',
