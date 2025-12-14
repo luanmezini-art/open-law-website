@@ -21,44 +21,44 @@ const Hero = () => {
           Wählen Sie Ihr Wunschbüro direkt am Grundriss und erstellen Sie sofort Ihren Mietvertrag.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-          <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
-              <MapPin className="w-6 h-6" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 max-w-4xl mx-auto">
+          <div className="flex flex-col items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+              <MapPin className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-sm text-slate-400">Standort</div>
-              <div className="font-semibold">Berlin Mitte</div>
+              <div className="text-xs md:text-sm text-slate-400">Standort</div>
+              <div className="text-sm md:text-base font-semibold">Berlin Mitte</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
-              <Building2 className="w-6 h-6" />
+          <div className="flex flex-col items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+              <Building2 className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-sm text-slate-400">Gesamtfläche</div>
-              <div className="font-semibold">2.500 m²</div>
+              <div className="text-xs md:text-sm text-slate-400">Gesamtfläche</div>
+              <div className="text-sm md:text-base font-semibold">2.500 m²</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
-              <Clock className="w-6 h-6" />
+          <div className="flex flex-col items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+              <Clock className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-sm text-slate-400">Zugang</div>
-              <div className="font-semibold">24/7 verfügbar</div>
+              <div className="text-xs md:text-sm text-slate-400">Zugang</div>
+              <div className="text-sm md:text-base font-semibold">24/7 verfügbar</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-white/5 transition-colors">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
-              <Shield className="w-6 h-6" />
+          <div className="flex flex-col items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+              <Shield className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-sm text-slate-400">Sicherheit</div>
-              <div className="font-semibold">Modernes System</div>
+              <div className="text-xs md:text-sm text-slate-400">Sicherheit</div>
+              <div className="text-sm md:text-base font-semibold">Modernes System</div>
             </div>
           </div>
         </div>
