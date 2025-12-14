@@ -89,15 +89,15 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
 
     return (
         <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-8 md:my-8 animate-in fade-in zoom-in duration-300">
-                <div className="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center relative md:sticky md:top-0 z-10 rounded-t-2xl">
-                    <h3 className="text-xl font-bold text-slate-900">Mietanfrage ({selectedOffices.length} Büros)</h3>
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-4 md:my-8 animate-in fade-in zoom-in duration-300">
+                <div className="bg-slate-50 p-4 md:p-6 border-b border-slate-100 flex justify-between items-center relative md:sticky md:top-0 z-10 rounded-t-2xl">
+                    <h3 className="text-lg md:text-xl font-bold text-slate-900">Mietanfrage ({selectedOffices.length} Büros)</h3>
                     <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full text-slate-500">
-                        <X className="w-6 h-6" />
+                        <X className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
 
-                <div className="p-8">
+                <div className="p-4 md:p-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div className="space-y-4">
                             <div>

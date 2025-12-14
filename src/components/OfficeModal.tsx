@@ -13,34 +13,34 @@ const OfficeModal: React.FC<OfficeModalProps> = ({ office, onClose, onRequest })
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
                 {/* Image */}
-                <div className="h-48 w-full relative">
+                <div className="h-32 md:h-48 w-full relative">
                     <img
                         src={office.image || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"}
                         alt={office.name}
                         className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    <div className="absolute bottom-4 left-6 text-white">
-                        <h3 className="text-2xl font-bold shadow-sm">{office.name}</h3>
+                    <div className="absolute bottom-3 left-4 md:bottom-4 md:left-6 text-white">
+                        <h3 className="text-xl md:text-2xl font-bold shadow-sm">{office.name}</h3>
                     </div>
                 </div>
 
                 {/* Header (Simplified) */}
-                <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div className="bg-slate-50 px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                        <span className="text-sm text-green-600 font-medium uppercase tracking-wide">Verfügbar</span>
+                        <span className="text-xs md:text-sm text-green-600 font-medium uppercase tracking-wide">Verfügbar</span>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500"
+                        className="p-1.5 md:p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500"
                     >
-                        <X className="w-6 h-6" />
+                        <X className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
 
                 {/* Body */}
-                <div className="p-8">
+                <div className="p-4 md:p-8">
                     <div className="grid grid-cols-2 gap-4 mb-8">
                         <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
                             <div className="flex items-center gap-2 text-blue-600 mb-1">
