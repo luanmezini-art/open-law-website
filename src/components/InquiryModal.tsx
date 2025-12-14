@@ -50,13 +50,15 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
         return Object.keys(newErrors).length === 0;
     };
 
+    const [lastContract, setLastContract] = useState<{ doc: any, filename: string } | null>(null);
+
     const handleSubmit = () => {
         if (validate()) {
-            generateContract(selectedOffices, formData);
+            const result = generateContract(selectedOffices, formData);
+            result.doc.save(result.filename);
+            setLastContract(result);
             setIsSuccess(true);
-            setTimeout(() => {
-                onClose();
-            }, 3000);
+            // Removed auto-close timeout to let user see the download feedback
         }
     };
 
@@ -77,11 +79,24 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                     </div>
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">Anfrage erfolgreich!</h3>
                     <p className="text-slate-600 mb-6">
-                        Ihr Mietvertrag wurde generiert und heruntergeladen. Wir werden uns in Kürze bei Ihnen melden.
+                        Ihr Mietvertrag wurde generiert und heruntergeladen. <br />
+                        Wir werden uns in Kürze bei Ihnen melden.
                     </p>
-                    <button onClick={onClose} className="text-blue-600 font-medium hover:underline">
-                        Schließen
-                    </button>
+
+                    <div className="flex flex-col gap-3">
+                        {lastContract && (
+                            <button
+                                onClick={() => lastContract.doc.save(lastContract.filename)}
+                                className="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium flex items-center justify-center gap-2 transition-colors"
+                            >
+                                <Download className="w-5 h-5" />
+                                Vertrag erneut herunterladen
+                            </button>
+                        )}
+                        <button onClick={onClose} className="w-full py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors">
+                            Schließen
+                        </button>
+                    </div>
                 </div>
             </div>
         );

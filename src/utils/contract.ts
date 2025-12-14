@@ -150,6 +150,7 @@ export const generateContract = (offices: Office[], data: FormData) => {
   doc.text('(BusinessCenter Premium)', margin, y);
   doc.text(`(${data.companyName})`, margin + 90, y);
 
-  // Save
-  doc.save(`Mietvertrag_BusinessCenter_${data.companyName.replace(/\s+/g, '_')}.pdf`);
+  const filename = `Mietvertrag_BusinessCenter_${data.companyName.replace(/\s+/g, '_')}.pdf`;
+
+  return { doc, filename };
 };
