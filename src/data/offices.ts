@@ -8,6 +8,7 @@ export interface Office {
     area: number;
     price: number;
     status: 'available' | 'reserved' | 'rented';
+    type?: 'office' | 'facility';
     features: string[];
     description: string;
     x: number;
@@ -40,6 +41,39 @@ export const offices: Office[] = [
         image: imgLarge,
     },
     // We will place Top Row at y=0, Bottom Row at y=200. Corridor roughly in between visually.
+
+    // --- Hofseite (Top Row) ---
+    // Left Core
+    {
+        id: 'TH4',
+        name: 'Treppenhaus',
+        area: 0,
+        price: 0,
+        status: 'rented',
+        type: 'facility',
+        features: [],
+        description: 'Treppenhaus Links (TH4)',
+        x: 0,
+        y: 0,
+        width: 80,
+        height: 120,
+        image: imgSmall,
+    },
+    {
+        id: 'WC_L',
+        name: 'WC / Küche',
+        area: 0,
+        price: 0,
+        status: 'rented',
+        type: 'facility',
+        features: [],
+        description: 'Sanitärbereich und Teeküche',
+        x: 90,
+        y: 0,
+        width: 130,
+        height: 120,
+        image: imgSmall,
+    },
 
     // Hofseite Rooms (Left to Right)
     {
@@ -95,6 +129,22 @@ export const offices: Office[] = [
         x: 640,
         y: 0,
         width: 100,
+        height: 120,
+        image: imgSmall,
+    },
+    // Right Core
+    {
+        id: 'TH5',
+        name: 'Treppenhaus',
+        area: 0,
+        price: 0,
+        status: 'rented',
+        type: 'facility',
+        features: [],
+        description: 'Treppenhaus Rechts (TH5)',
+        x: 750,
+        y: 0,
+        width: 80,
         height: 120,
         image: imgSmall,
     },

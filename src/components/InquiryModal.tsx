@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { jsPDF } from 'jspdf';
 import { X, Download, CheckCircle } from 'lucide-react';
 import type { Office } from '../data/offices';
 import { generateContract } from '../utils/contract';
@@ -50,7 +51,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
         return Object.keys(newErrors).length === 0;
     };
 
-    const [lastContract, setLastContract] = useState<{ doc: any, filename: string } | null>(null);
+    const [lastContract, setLastContract] = useState<{ doc: jsPDF, filename: string } | null>(null);
 
     const handleSubmit = () => {
         if (validate()) {

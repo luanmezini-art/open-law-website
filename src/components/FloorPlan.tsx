@@ -15,6 +15,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
     // Update focused office when selection changes (optional, but good UX)
     useEffect(() => {
         if (selectedOffices.length > 0) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
             setFocusedOffice(selectedOffices[selectedOffices.length - 1]);
         } else {
             setFocusedOffice(null);
