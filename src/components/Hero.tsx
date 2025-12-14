@@ -16,10 +16,21 @@ const Hero = () => {
           <span className="text-blue-400">wartet auf Sie</span>
         </h1>
 
-        <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-16 leading-relaxed">
+        <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
           Entdecken Sie moderne Gewerbeflächen im BusinessPark Zentrum.
           Wählen Sie Ihr Wunschbüro direkt am Grundriss und erstellen Sie sofort Ihren Mietvertrag.
         </p>
+
+        <div className="flex justify-center mb-16">
+          <a
+            href="/Expose.pdf"
+            target="_blank"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium transition-colors backdrop-blur-sm border border-white/10"
+          >
+            <Building2 className="w-5 h-5" />
+            Exposé als PDF ansehen
+          </a>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 max-w-4xl mx-auto">
           <div className="flex flex-col items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl hover:bg-white/5 transition-colors">
@@ -28,7 +39,7 @@ const Hero = () => {
             </div>
             <div className="text-center">
               <div className="text-xs md:text-sm text-slate-400">Standort</div>
-              <div className="text-sm md:text-base font-semibold">Berlin Mitte</div>
+              <div className="text-sm md:text-base font-semibold">Wallstr. 15, Berlin</div>
             </div>
           </div>
 
@@ -38,7 +49,7 @@ const Hero = () => {
             </div>
             <div className="text-center">
               <div className="text-xs md:text-sm text-slate-400">Gesamtfläche</div>
-              <div className="text-sm md:text-base font-semibold">2.500 m²</div>
+              <div className="text-sm md:text-base font-semibold">415 m² (4. OG)</div>
             </div>
           </div>
 
@@ -47,8 +58,8 @@ const Hero = () => {
               <Clock className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-xs md:text-sm text-slate-400">Zugang</div>
-              <div className="text-sm md:text-base font-semibold">24/7 verfügbar</div>
+              <div className="text-xs md:text-sm text-slate-400">Verfügbarkeit</div>
+              <div className="text-sm md:text-base font-semibold">Ab 01.07.2025</div>
             </div>
           </div>
 
@@ -57,8 +68,8 @@ const Hero = () => {
               <Shield className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div className="text-center">
-              <div className="text-xs md:text-sm text-slate-400">Sicherheit</div>
-              <div className="text-sm md:text-base font-semibold">Modernes System</div>
+              <div className="text-xs md:text-sm text-slate-400">Ausstattung</div>
+              <div className="text-sm md:text-base font-semibold">Vollständig renoviert</div>
             </div>
           </div>
         </div>
