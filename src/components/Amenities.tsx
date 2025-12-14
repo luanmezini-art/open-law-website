@@ -1,10 +1,13 @@
 
 
-import { Wifi, Coffee, Users, Printer, Lock, Car } from 'lucide-react';
+import { Wifi, Coffee, Users, Printer, Lock, Car, Train, Building2, ShowerHead } from 'lucide-react';
 
 const Amenities = () => {
     const amenities = [
         { icon: Wifi, title: 'Highspeed Internet', desc: 'Glasfaser-Anbindung' },
+        { icon: Train, title: 'Top Anbindung', desc: 'U2 Märk. Museum & S-Jannowitzbrücke' },
+        { icon: Building2, title: 'Modernes Objekt', desc: 'Bürokomplex Baujahr 2000er' },
+        { icon: ShowerHead, title: 'Sanitär & Küche', desc: '2 Bäder, 2 Duschen & Küche' },
         { icon: Coffee, title: 'Premium Kaffee', desc: 'Flatrate inklusive' },
         { icon: Users, title: 'Meetingräume', desc: 'Buchbar per App' },
         { icon: Printer, title: 'Druckerstation', desc: 'Fair-Use Policy' },
