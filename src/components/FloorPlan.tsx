@@ -31,6 +31,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
     };
 
     const getStatusColor = (office: Office) => {
+        if (office.type === 'facility') return '#e2e8f0'; // slate-200
         if (isSelected(office)) return '#3b82f6'; // blue-500
         switch (office.status) {
             case 'available': return '#22c55e'; // green-500
@@ -61,6 +62,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
     return (
         <div className="py-20 px-6 bg-white">
             <div className="max-w-7xl mx-auto">
+                {/* Structural update: Rooms 20-35 with Facility Blocks */}
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-slate-900 mb-4">Wählen Sie Ihr Büro</h2>
                     <p className="text-slate-600 max-w-2xl mx-auto">
@@ -98,8 +100,12 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                 {offices.map((office) => (
                                     <g
                                         key={office.id}
-                                        onClick={() => handleOfficeClick(office)}
-                                        className={`transition-all duration-300 ${office.status === 'available' ? 'cursor-pointer hover:opacity-90' : 'cursor-pointer opacity-90'
+                                        onClick={() => office.type !== 'facility' && handleOfficeClick(office)}
+                                        className={`transition-all duration-300 ${office.type === 'facility'
+                                            ? 'cursor-default'
+                                            : office.status === 'available'
+                                                ? 'cursor-pointer hover:opacity-90'
+                                                : 'cursor-pointer opacity-90'
                                             }`}
                                     >
                                         <rect
@@ -115,27 +121,29 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ selectedOffices, onOfficeToggle }
                                         />
                                         <text
                                             x={office.x + office.width / 2}
-                                            y={office.y + office.height / 2 - 15}
+                                            y={office.y + office.height / 2 - (office.type === 'facility' ? 0 : 15)}
                                             textAnchor="middle"
-                                            fill="white"
-                                            fontSize="16"
+                                            fill={office.type === 'facility' ? '#64748b' : 'white'} // slate-500 for facilities
+                                            fontSize="14"
                                             fontWeight="bold"
                                             pointerEvents="none"
-                                            style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
+                                            style={{ textShadow: office.type === 'facility' ? 'none' : '0 1px 2px rgba(0,0,0,0.1)' }}
                                         >
                                             {office.name}
                                         </text>
-                                        <text
-                                            x={office.x + office.width / 2}
-                                            y={office.y + office.height / 2 + 10}
-                                            textAnchor="middle"
-                                            fill="white"
-                                            fontSize="14"
-                                            pointerEvents="none"
-                                            style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
-                                        >
-                                            {office.area} m²
-                                        </text>
+                                        {office.type !== 'facility' && (
+                                            <text
+                                                x={office.x + office.width / 2}
+                                                y={office.y + office.height / 2 + 10}
+                                                textAnchor="middle"
+                                                fill="white"
+                                                fontSize="14"
+                                                pointerEvents="none"
+                                                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
+                                            >
+                                                {office.area} m²
+                                            </text>
+                                        )}
                                     </g>
                                 ))}
 
