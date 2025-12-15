@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
-import { X, Download, CheckCircle, AlertTriangle, Calendar } from 'lucide-react';
+import { X, Download, CheckCircle, AlertTriangle, Calendar, Loader2 } from 'lucide-react';
 import type { Office } from '../data/offices';
 import { generateContract } from '../utils/contract';
 
@@ -114,13 +114,26 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
 
     const [lastContract, setLastContract] = useState<{ doc: jsPDF, filename: string } | null>(null);
 
-    const handleSubmit = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async () => {
         if (validate()) {
-            // Pass days to contract
-            const result = generateContract(selectedOffices, { ...formData, duration: durationDays, durationUnit: 'days' });
-            // result.doc.save(result.filename); // REMOVED auto-save
-            setLastContract(result);
-            setIsSuccess(true);
+            setIsSubmitting(true);
+            // Simulate a short delay for UX and to allow UI to update
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            try {
+                // Pass days to contract
+                const result = generateContract(selectedOffices, { ...formData, duration: durationDays, durationUnit: 'days' });
+                // result.doc.save(result.filename); // REMOVED auto-save
+                setLastContract(result);
+                setIsSuccess(true);
+            } catch (error) {
+                console.error("Contract generation failed:", error);
+                // In a real app we would set a global error here
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -322,11 +335,20 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ selectedOffices, onClose })
                         </button>
                         <button
                             onClick={handleSubmit}
-                            disabled={!!availabilityError}
-                            className={`flex-1 py-3 px-6 rounded-xl text-white font-bold flex items-center justify-center gap-2 shadow-lg transition-all ${availabilityError ? 'bg-slate-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-blue-500/30'}`}
+                            disabled={!!availabilityError || isSubmitting}
+                            className={`flex-1 py-3 px-6 rounded-xl text-white font-bold flex items-center justify-center gap-2 shadow-lg transition-all ${availabilityError || isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-blue-500/30'}`}
                         >
-                            <CheckCircle className="w-5 h-5" />
-                            Verfügbarkeit prüfen & Buchen
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Verarbeite...
+                                </>
+                            ) : (
+                                <>
+                                    <CheckCircle className="w-5 h-5" />
+                                    Verfügbarkeit prüfen & Buchen
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
